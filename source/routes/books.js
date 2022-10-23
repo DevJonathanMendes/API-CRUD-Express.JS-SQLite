@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 // PARA DESENVOLVIMENTO.
+console.clear();
 router.use((req, res, next) => {
     console.log('Time: ', new Date().toLocaleString());
     next();
