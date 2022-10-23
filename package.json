@@ -6,8 +6,8 @@
   "author": "DevJonathanMendes <jonathanbarreiro88@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "clear & nodemon source/server",
-    "start": "clear & node source/server"
+    "dev": "nodemon server",
+    "start": "node server"
   },
   "dependencies": {
     "express": "^4.18.2"
