@@ -1,13 +1,13 @@
 {
   "name": "api-com-express.js",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "source/server.js",
   "repository": "https://github.com/DevJonathanMendes/API-Com-Express.JS.git",
   "author": "DevJonathanMendes <jonathanbarreiro88@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon index",
-    "start": "node index"
+    "dev": "nodemon source/server",
+    "start": "node source/server"
   },
   "dependencies": {
     "express": "^4.18.2"
