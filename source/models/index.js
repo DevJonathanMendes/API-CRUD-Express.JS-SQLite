@@ -13,6 +13,6 @@ db.run(
         pages INTEGER NOT NULL,
         published INTEGER NOT NULL
     );`
-    , err => { if (err) throw new Error(err.message); });
+);
 
 module.exports = db;
