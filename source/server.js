@@ -1,4 +1,5 @@
 const express = require("express");
+const db = require("./models/index");
 const router = require("./routes/books");
 
 const server = express();

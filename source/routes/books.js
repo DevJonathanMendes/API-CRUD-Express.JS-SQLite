@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-// PARA DESENVOLVIMENTO.
+// Logger.
 console.clear();
 router.use((req, res, next) => {
-    console.log('Time: ', new Date().toLocaleString());
+    console.log(`Request ${req.method}: ${new Date().toLocaleString()}`);
+    console.log(`User-Agent: ${req.headers["user-agent"]}`);
     next();
 });
-//
 
 router.route("/books")
     .get((req, res) => {
