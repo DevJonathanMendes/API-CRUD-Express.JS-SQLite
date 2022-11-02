@@ -1,4 +1,6 @@
 const express = require("express");
+const controllers = require("../controllers/index");
+
 const router = express.Router();
 
 // Logger.
@@ -13,7 +15,7 @@ router.route("/books")
         res.send("GET BOOKS");
     })
     .post((req, res) => {
-        res.send("POST BOOKS");
+        controllers.createBook(req, res);
     })
     .patch((req, res) => {
         res.send("PATCH BOOKS");
