@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 // Logger.
-console.clear();
 router.use((req, res, next) => {
     console.log(`Request ${req.method}: ${new Date().toLocaleString()}`);
     console.log(`User-Agent: ${req.headers["user-agent"]}`);
