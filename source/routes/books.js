@@ -12,7 +12,7 @@ router.use((req, res, next) => {
 
 router.route("/books")
     .get((req, res) => {
-        res.send("GET BOOKS");
+        controllers.getAllBooks(req, res);
     })
     .post((req, res) => {
         controllers.createBook(req, res);
