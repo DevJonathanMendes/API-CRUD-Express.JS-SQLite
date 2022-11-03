@@ -81,6 +81,16 @@ const controllers = {
         ])
             .then(() => res.status(201).send("OK"))
             .catch(message => res.status(400).send(errorJson(message)));
+    },
+    getAllBooks: async (req, res) => {
+        new Promise((resolve, reject) => {
+            const select = "SELECT * FROM books";
+
+            db.all(select, (err, rows) =>
+                err ? reject() : resolve(rows));
+        })
+            .then(rows => res.status(200).send(rows))
+            .catch(() => res.status(404).send("Not Found."));
     }
 };
 
