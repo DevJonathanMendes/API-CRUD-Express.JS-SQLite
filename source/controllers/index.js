@@ -57,6 +57,19 @@ const controllers = {
         new Promise((resolve, reject) => {
             const select = "SELECT * FROM books";
 
+            db.all(select, (err, rows) =>
+                err ? reject() : resolve(rows));
+        })
+            .then(rows => res.status(200).send(rows))
+            .catch(() => res.status(404).send("Not Found."));
+    },
+    getBook: async (req, res) => {
+        new Promise((resolve, reject) => {
+            const regId = /^\d*$/;
+            let id = req.params.id;
+            id = await(regId.test(id) ? id : reject());
+            const select = `SELECT * FROM books WHERE id=${id}`;
+
             db.get(select, (err, rows) =>
                 err ? reject() : resolve(rows));
         })
