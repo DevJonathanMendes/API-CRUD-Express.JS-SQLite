@@ -11,17 +11,10 @@ router.use((req, res, next) => {
 });
 
 router.route("/books")
-    .get((req, res) => {
-        controllers.getAllBooks(req, res);
-    })
-    .post((req, res) => {
-        controllers.createBook(req, res);
-    })
-    .patch((req, res) => {
-        res.send("PATCH BOOKS");
-    })
-    .delete((req, res) => {
-        res.send("DELETE BOOKS");
-    });
+    .get(controllers.getAllBooks)
+    .post(controllers.createBook);
+
+router.route("/books/:id")
+    .delete((res, req) => { res.send("ROUTE DELETE") });
 
 module.exports = router;
