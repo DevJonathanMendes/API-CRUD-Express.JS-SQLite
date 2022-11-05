@@ -1,6 +1,7 @@
 const db = require("../models/index");
 
 const testId = id => /^\d*$/.test(id);
+const getId = id => testId(id) ? id : false;
 
 const throwError = message => {
     throw new Error(message);
@@ -67,8 +68,7 @@ const controllers = {
     },
     getBook: async (req, res) => {
         new Promise((resolve, reject) => {
-            const reqId = req.params.id;
-            const id = testId(reqId) ? reqId : reject();
+            const id = getId(req.params.id) || reject();
             const select = `SELECT * FROM books WHERE id=${id}`;
 
             db.get(select, (err, rows) =>
@@ -81,9 +81,10 @@ const controllers = {
         Promise.all([
             validateValues(req.body),
             new Promise((resolve, reject) => {
+                const id = getId(req.params.id) || reject();
                 const set = Object.entries(req.body).map(([key, value]) =>
                     `${key}='${typeof value == "string" ? value.toLowerCase() : value}'`);
-                const update = `UPDATE books SET ${set} WHERE id=${req.params.id}`;
+                const update = `UPDATE books SET ${set} WHERE id=${id}`;
 
                 db.run(update, err => err ? reject("Title Already Exists.") : resolve());
             })])
@@ -92,8 +93,7 @@ const controllers = {
     },
     deleteBook: async (req, res) => {
         new Promise((resolve, reject) => {
-            const reqId = req.params.id;
-            const id = testId(reqId) ? reqId : reject();
+            const id = getId(req.params.id) || reject();
             const del = `DELETE FROM books WHERE id=${id}`;
 
             db.run(del, err => err ? reject() : resolve());
