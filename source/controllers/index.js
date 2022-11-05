@@ -57,7 +57,7 @@ const controllers = {
         new Promise((resolve, reject) => {
             const select = "SELECT * FROM books";
 
-            db.all(select, (err, rows) =>
+            db.get(select, (err, rows) =>
                 err ? reject() : resolve(rows));
         })
             .then(rows => res.status(200).send(rows))
