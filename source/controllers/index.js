@@ -1,5 +1,7 @@
 const db = require("../models/index");
 
+const testId = id => /^\d*$/.test(id);
+
 const throwError = message => {
     throw new Error(message);
 };
@@ -60,20 +62,19 @@ const controllers = {
             db.all(select, (err, rows) =>
                 err ? reject() : resolve(rows));
         })
-            .then(rows => res.status(200).send(rows))
+            .then(rows => res.status(200).send(rows || "Not Found."))
             .catch(() => res.status(404).send("Not Found."));
     },
     getBook: async (req, res) => {
         new Promise((resolve, reject) => {
-            const regId = /^\d*$/;
-            let id = req.params.id;
-            id = await(regId.test(id) ? id : reject());
+            const reqId = req.params.id;
+            const id = testId(reqId) ? reqId : reject();
             const select = `SELECT * FROM books WHERE id=${id}`;
 
             db.get(select, (err, rows) =>
                 err ? reject() : resolve(rows));
         })
-            .then(rows => res.status(200).send(rows))
+            .then(rows => res.status(200).send(rows || "Not Found."))
             .catch(() => res.status(404).send("Not Found."));
     },
     patchBook: async (req, res) => {
@@ -91,7 +92,9 @@ const controllers = {
     },
     deleteBook: async (req, res) => {
         new Promise((resolve, reject) => {
-            const del = `DELETE FROM books WHERE id=${req.params.id}`;
+            const reqId = req.params.id;
+            const id = testId(reqId) ? reqId : reject();
+            const del = `DELETE FROM books WHERE id=${id}`;
 
             db.run(del, err => err ? reject() : resolve());
         })
