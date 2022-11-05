@@ -1,33 +1,5 @@
 const db = require("../models/index");
 
-const errorJson = message => {
-    return {
-        "error": message,
-        "example": {
-            "title": {
-                Type: "String",
-                minSize: 2,
-                maxSize: 64
-            },
-            "author": {
-                Type: "String",
-                minSize: 2,
-                maxSize: 64
-            },
-            "pages": {
-                Type: "Number",
-                minSize: 1,
-                maxSize: 5
-            },
-            "published": {
-                Type: "Number",
-                minSize: 4,
-                maxSize: 4
-            }
-        }
-    };
-};
-
 const throwError = message => {
     throw new Error(message);
 };
@@ -77,10 +49,9 @@ const controllers = {
                 const insert = `INSERT INTO books (${columns}) VALUES (${values});`;
 
                 db.run(insert, err => err ? reject("Title Already Exists.") : resolve());
-            })
-        ])
-            .then(() => res.status(201).send("OK"))
-            .catch(message => res.status(400).send(errorJson(message)));
+            })])
+            .then(() => res.status(201).send("Created."))
+            .catch(message => res.status(400).send(message));
     },
     getAllBooks: async (req, res) => {
         new Promise((resolve, reject) => {
@@ -92,14 +63,27 @@ const controllers = {
             .then(rows => res.status(200).send(rows))
             .catch(() => res.status(404).send("Not Found."));
     },
+    patchBook: async (req, res) => {
+        Promise.all([
+            validateValues(req.body),
+            new Promise((resolve, reject) => {
+                const set = Object.entries(req.body).map(([key, value]) =>
+                    `${key}='${typeof value == "string" ? value.toLowerCase() : value}'`);
+                const update = `UPDATE books SET ${set} WHERE id=${req.params.id}`;
+
+                db.run(update, err => err ? reject("Title Already Exists.") : resolve());
+            })])
+            .then(() => res.status(200).send("Ok"))
+            .catch(err => res.status(400).send(err.message));
+    },
     deleteBook: async (req, res) => {
         new Promise((resolve, reject) => {
             const del = `DELETE FROM books WHERE id=${req.params.id}`;
 
-            db.run(del, err => err ? reject(err) : resolve("Ok."));
+            db.run(del, err => err ? reject() : resolve());
         })
-            .then(message => res.status(200).send(message))
-            .catch(err => res.status(400).send(err.message));
+            .then(() => res.status(200).send("Ok."))
+            .catch(() => res.status(400).send("Bad Request."));
     }
 };
 
