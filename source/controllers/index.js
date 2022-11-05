@@ -91,6 +91,15 @@ const controllers = {
         })
             .then(rows => res.status(200).send(rows))
             .catch(() => res.status(404).send("Not Found."));
+    },
+    deleteBook: async (req, res) => {
+        new Promise((resolve, reject) => {
+            const del = `DELETE FROM books WHERE id=${req.params.id}`;
+
+            db.run(del, err => err ? reject(err) : resolve("Ok."));
+        })
+            .then(message => res.status(200).send(message))
+            .catch(err => res.status(400).send(err.message));
     }
 };
 
