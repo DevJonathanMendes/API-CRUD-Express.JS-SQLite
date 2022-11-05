@@ -15,6 +15,7 @@ router.route("/books")
     .post(controllers.createBook);
 
 router.route("/books/:id")
+    .patch(controllers.patchBook)
     .delete(controllers.deleteBook);
 
 module.exports = router;
