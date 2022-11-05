@@ -77,8 +77,7 @@ const controllers = {
                 const insert = `INSERT INTO books (${columns}) VALUES (${values});`;
 
                 db.run(insert, err => err ? reject("Title Already Exists.") : resolve());
-            })
-        ])
+            })])
             .then(() => res.status(201).send("OK"))
             .catch(message => res.status(400).send(errorJson(message)));
     },
@@ -91,6 +90,19 @@ const controllers = {
         })
             .then(rows => res.status(200).send(rows))
             .catch(() => res.status(404).send("Not Found."));
+    },
+    patchBook: async (req, res) => {
+        Promise.all([
+            validateValues(req.body),
+            new Promise((resolve, reject) => {
+                const set = Object.entries(req.body).map(([key, value]) =>
+                    `${key}='${typeof value == "string" ? value.toLowerCase() : value}'`);
+                const update = `UPDATE books SET ${set} WHERE id=${req.params.id}`;
+
+                db.run(update, err => err ? reject("Title Already Exists.") : resolve());
+            })])
+            .then(() => res.status(200).send("Ok"))
+            .catch(err => res.status(400).send(errorJson(err.message)));
     },
     deleteBook: async (req, res) => {
         new Promise((resolve, reject) => {
