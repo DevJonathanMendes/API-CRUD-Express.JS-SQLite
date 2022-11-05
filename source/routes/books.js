@@ -15,6 +15,6 @@ router.route("/books")
     .post(controllers.createBook);
 
 router.route("/books/:id")
-    .delete((res, req) => { res.send("ROUTE DELETE") });
+    .delete(controllers.deleteBook);
 
 module.exports = router;
