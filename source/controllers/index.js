@@ -42,6 +42,7 @@ const validateValues = book => {
 };
 
 const controllers = {
+    // Cria um livro a partir de um JSON.
     createBook: async (req, res) => {
         Promise.all([
             validateValues(req.body),
@@ -56,6 +57,7 @@ const controllers = {
             .then(() => res.status(201).send("Created."))
             .catch(message => res.status(400).send(message));
     },
+    // Retorna todos os livros.
     getAllBooks: async (req, res) => {
         new Promise((resolve, reject) => {
             const select = "SELECT * FROM books";
@@ -66,6 +68,7 @@ const controllers = {
             .then(rows => res.status(200).send(rows || "Not Found."))
             .catch(() => res.status(404).send("Not Found."));
     },
+    // Retorna um livro específico a partir de um ID.
     getBook: async (req, res) => {
         new Promise((resolve, reject) => {
             const id = getId(req.params.id) || reject();
@@ -77,6 +80,7 @@ const controllers = {
             .then(rows => res.status(200).send(rows || "Not Found."))
             .catch(() => res.status(404).send("Not Found."));
     },
+    // Atualiza um livro a partir de um ID
     patchBook: async (req, res) => {
         Promise.all([
             validateValues(req.body),
@@ -91,6 +95,7 @@ const controllers = {
             .then(() => res.status(200).send("Ok"))
             .catch(err => res.status(400).send(err.message));
     },
+    // Deleta um livro a partir de um ID.
     deleteBook: async (req, res) => {
         new Promise((resolve, reject) => {
             const id = getId(req.params.id) || reject();
