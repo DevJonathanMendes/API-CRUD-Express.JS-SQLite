@@ -6,7 +6,7 @@ const db = new sqlite3.Database("./source/database/books.db", err => {
 
 db.serialize(() => {
     db.run(
-        `CREATE TABLE IF NOT EXISTS books
+        `CREATE TABLE books
         (
             id INTEGER PRIMARY KEY,
             title TEXT NOT NULL UNIQUE,
