@@ -3,8 +3,8 @@ const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("./source/database/books.db", err => {
     if (err) throw new Error(err.message);
 });
+
 db.serialize(() => {
-    db.run("DROP TABLE IF EXISTS books");
     db.run(
         `CREATE TABLE IF NOT EXISTS books
         (
