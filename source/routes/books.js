@@ -3,6 +3,17 @@ const controllers = require("../controllers/index");
 
 const router = express.Router();
 
+ // CORS.
+router.use((req, res, next) => {
+    res.header({
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE",
+        "Access-Control-Allow-Headers": " Content-Type, Origin, X-Requested-With, Accept",
+        "Access-Control-Allow-Credentials": "true"
+    })
+    next();
+});
+
 // Logger.
 router.use((req, res, next) => {
     console.log(`Request ${req.method}: ${new Date().toLocaleString()}`);
