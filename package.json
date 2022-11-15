@@ -10,6 +10,7 @@
     "start": "node source/server"
   },
   "dependencies": {
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "sqlite3": "^5.1.2",
     "winston": "^3.8.2"
