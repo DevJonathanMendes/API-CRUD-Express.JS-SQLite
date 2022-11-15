@@ -1,4 +1,4 @@
-const db = require("../models/index");
+const { db } = require("../models/index");
 
 const testId = id => /^\d*$/.test(id);
 const getId = id => testId(id) ? id : false;
