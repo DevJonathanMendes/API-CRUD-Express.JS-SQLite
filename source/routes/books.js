@@ -14,13 +14,6 @@ router.use((req, res, next) => {
     next();
 });
 
-// Logger.
-router.use((req, res, next) => {
-    console.log(`Request ${req.method}: ${new Date().toLocaleString()}`);
-    console.log(`User-Agent: ${req.headers["user-agent"]}`);
-    next();
-});
-
 router.route("/books")
     .get(controllers.getAllBooks)
     .post(controllers.createBook);
