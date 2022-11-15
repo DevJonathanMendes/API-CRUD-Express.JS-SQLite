@@ -6,6 +6,8 @@ const server = express();
 const PORT = process.env.PORT || 3000;
 
 startDatabase();
-server.use(express.json(), router);
+server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
+server.use(router);
 
-server.listen(PORT, () => console.log("Server On."));
+server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
