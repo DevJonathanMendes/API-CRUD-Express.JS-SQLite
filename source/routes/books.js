@@ -3,7 +3,7 @@ const controllers = require("../controllers/index");
 
 const router = express.Router();
 
- // CORS.
+/* // CORS.
 router.use((req, res, next) => {
     res.header({
         "Access-Control-Allow-Origin": "*",
@@ -12,7 +12,7 @@ router.use((req, res, next) => {
         "Access-Control-Allow-Credentials": "true"
     })
     next();
-});
+}); */
 
 router.route("/books")
     .get(controllers.getAllBooks)
