@@ -2,7 +2,7 @@ const express = require("express");
 const { startDatabase } = require("./models/index");
 const morganMiddleware = require("./middlewares/morgan");
 const helmet = require("helmet");
-const router = require("./routes/books");
+const router = require("./routes/index");
 
 const app = express();
 
