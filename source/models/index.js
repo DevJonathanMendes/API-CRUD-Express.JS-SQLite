@@ -1,27 +1,23 @@
-const sqlite3 = require("sqlite3").verbose();
+const { Database } = require("sqlite3").verbose();
+const { existsSync, mkdirSync } = require("fs");
+const { error, debug } = require("../utils/logger");
 
-const db = new sqlite3.Database("./source/database/books.db", err => {
-    if (err) throw new Error(err.message);
-});
+existsSync("source/database") || mkdirSync("source/database");
+const sql = new Database(`source/database/books.db`, err =>
+    err ? error(err.message)
+        : debug(`Database 'books' has been created.`)
+);
 
-const startDatabase = () => {
-    db.serialize(() => {
-        db.run(`CREATE TABLE books
-            (
-                id INTEGER PRIMARY KEY,
-                title TEXT NOT NULL UNIQUE,
-                author TEXT NOT NULL,
-                pages INTEGER NOT NULL,
-                published INTEGER NOT NULL
-            );`
-        );
+sql.run(`CREATE TABLE books
+    (
+        id INTEGER PRIMARY KEY,
+        title TEXT NOT NULL UNIQUE,
+        author TEXT NOT NULL,
+        pages INTEGER NOT NULL,
+        published INTEGER NOT NULL
+    );`, err => err
+    ? debug("Table 'books' already exists.")
+    : debug("Table 'books' has been created.")
+);
 
-        const insert = "INSERT INTO books (title, author, pages, published) VALUES (?, ?, ?, ?)"
-        db.run(insert, ['c++: como programar', 'deitel', 1208, 2006]);
-        db.run(insert, ['código limpo', 'robert c. martin', 425, 2009]);
-        db.run(insert, ['javascript: o guia definitivo', 'david flanagan', 1080, 2012]);
-        db.run(insert, ['padrões javascript', 'david flanagan', 340, 2010]);
-    });
-};
-
-module.exports = { db, startDatabase };
+module.exports = sql;
