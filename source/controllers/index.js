@@ -39,7 +39,7 @@ const controllers = {
 
     getBook: (req, res) => {
         const id = getId(req.params.id);
-        const select = `SELECT * FROMs books WHERE id=${id}`;
+        const select = `SELECT * FROM books WHERE id=${id}`;
 
         sql.get(select, (err, rows) => {
             if (err) {
