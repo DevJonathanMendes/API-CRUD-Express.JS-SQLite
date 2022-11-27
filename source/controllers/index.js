@@ -1,13 +1,11 @@
 const sql = require("../models/index");
 const log = require("../utils/logger");
 
-const testId = id => /^\d*$/.test(id);
-const getId = id => testId(id) ? id : false;
-
 const throwError = message => {
     throw new Error(message);
 };
 
+const getId = id => /^\d*$/.test(id) ? id : null;
 const validateValues = book => {
     return new Promise((resolve, reject) => {
         try {
@@ -69,16 +67,17 @@ const controllers = {
         });
     },
 
-    getBook: async (req, res) => {
-        new Promise((resolve, reject) => {
-            const id = getId(req.params.id) || reject();
-            const select = `SELECT * FROM books WHERE id=${id}`;
+    getBook: (req, res) => {
+        const id = getId(req.params.id);
+        const select = `SELECT * FROMs books WHERE id=${id}`;
 
-            db.get(select, (err, rows) =>
-                err ? reject() : resolve(rows));
-        })
-            .then(rows => res.status(200).send(rows || "Not Found."))
-            .catch(() => res.status(404).send("Not Found."));
+        sql.get(select, (err, rows) => {
+            if (err) {
+                res.status(500).send("Internal Server Error.");
+                return log.error(err.message);
+            };
+            res.status(200).json(rows || { message: "Book does not exist." })
+        });
     },
 
     patchBook: async (req, res) => {
