@@ -1,4 +1,5 @@
-const { db } = require("../models/index");
+const sql = require("../models/index");
+const log = require("../utils/logger");
 
 const testId = id => /^\d*$/.test(id);
 const getId = id => testId(id) ? id : false;
@@ -57,15 +58,15 @@ const controllers = {
             .catch(message => res.status(400).send(message));
     },
 
-    getAllBooks: async (req, res) => {
-        new Promise((resolve, reject) => {
-            const select = "SELECT * FROM books";
-
-            db.all(select, (err, rows) =>
-                err ? reject() : resolve(rows));
-        })
-            .then(rows => res.status(200).send(rows || "Not Found."))
-            .catch(() => res.status(404).send("Not Found."));
+    getAllBooks: (req, res) => {
+        const select = "SELECT * FROM books";
+        sql.all(select, (err, rows) => {
+            if (err) {
+                res.status(500).send("Internal Server Error.");
+                return log.error(err.message);
+            };
+            res.status(200).json(rows);
+        });
     },
 
     getBook: async (req, res) => {
