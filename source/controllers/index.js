@@ -1,6 +1,7 @@
 const sql = require("../models/index");
-const { validateJSON, getId } = require("../utils/utils");
 const log = require("../utils/logger");
+const cache = require("../utils/cache");
+const { validateJSON, getId } = require("../utils/utils");
 
 const controllers = {
     createBook: (req, res) => {
@@ -39,14 +40,22 @@ const controllers = {
 
     getBook: (req, res) => {
         const id = getId(req.params.id);
-        const select = `SELECT * FROM books WHERE id=${id}`;
+        const bookCache = cache.get(id);
 
+        if (bookCache) {
+            return res.status(200).json(bookCache);
+        };
+
+        const select = `SELECT * FROM books WHERE id=${id}`;
         sql.get(select, (err, rows) => {
             if (err) {
                 res.status(500).send("Internal Server Error.");
-                return log.error(err.message);
-            };
-            res.status(200).json(rows || { message: "Book does not exist." })
+                log.error(err.message);
+            } else if (rows) {
+                res.status(200).json(rows);
+                cache.set(id, rows);
+            } else
+                res.status(204).send("No Content.");
         });
     },
 
