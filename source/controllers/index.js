@@ -3,19 +3,27 @@ const { validateJSON, getId } = require("../utils/utils");
 const log = require("../utils/logger");
 
 const controllers = {
-    createBook: async (req, res) => {
-        Promise.all([
-            validateJSON(req.body),
-            new Promise((resolve, reject) => {
-                const { title, author, pages, published } = req.body;
-                const columns = "title, author, pages, published";
-                const values = `'${title.toLowerCase()}', '${author.toLowerCase()}', ${pages}, ${published}`;
-                const insert = `INSERT INTO books (${columns}) VALUES (${values});`;
+    createBook: (req, res) => {
+        try {
+            validateJSON(req.body);
+            const { title, author, pages, published } = req.body;
+            const columns = "title, author, pages, published";
+            const values = `'${title.toLowerCase()}', '${author.toLowerCase()}', ${pages}, ${published}`;
+            const insert = `INSERT INTO books (${columns}) VALUES (${values});`;
 
-                db.run(insert, err => err ? reject("Title Already Exists.") : resolve());
-            })])
-            .then(() => res.status(201).send("Created."))
-            .catch(message => res.status(400).send(message));
+            sql.run(insert, err => {
+                if (err) {
+                    if (err.code == "SQLITE_CONSTRAINT") {
+                        return res.status(400).send("Title already exists.");
+                    };
+                    res.status(500).send("Internal Server Error.");
+                    return log.error(err.message);
+                };
+                res.status(201).send("Created.");
+            });
+        } catch (err) {
+            res.status(400).send(err.message);
+        };
     },
 
     getAllBooks: (req, res) => {
