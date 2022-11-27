@@ -95,15 +95,17 @@ const controllers = {
             .catch(err => res.status(400).send(err.message));
     },
 
-    deleteBook: async (req, res) => {
-        new Promise((resolve, reject) => {
-            const id = getId(req.params.id) || reject();
-            const del = `DELETE FROM books WHERE id=${id}`;
+    deleteBook: (req, res) => {
+        const id = getId(req.params.id);
+        const del = `DELETE FROM books WHERE id=${id}`;
 
-            db.run(del, err => err ? reject() : resolve());
-        })
-            .then(() => res.status(200).send("Ok."))
-            .catch(() => res.status(400).send("Bad Request."));
+        sql.run(del, err => {
+            if (err) {
+                res.status(400).send("Bad Request.")
+                return log.error(err.message);
+            };
+            res.status(200).send("Ok.")
+        });
     }
 };
 
