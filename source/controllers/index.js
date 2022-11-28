@@ -73,6 +73,7 @@ const controllers = {
                     return log.error(err.message);
                 };
                 res.status(200).send("Ok.");
+                cache.delete(id);
             });
         } catch (err) {
             res.status(400).send(err.message);
@@ -85,10 +86,11 @@ const controllers = {
 
         sql.run(del, err => {
             if (err) {
-                res.status(400).send("Bad Request.")
+                res.status(400).send("Bad Request.");
                 return log.error(err.message);
             };
-            res.status(200).send("Ok.")
+            res.status(200).send("Ok.");
+            cache.delete(id);
         });
     }
 };
