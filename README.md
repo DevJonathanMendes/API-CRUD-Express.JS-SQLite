@@ -51,6 +51,7 @@ DELETE: /books/3221 - Deleta um livro específico.
 - [Helmet](https://www.npmjs.com/package/helmet?activeTab=readme) - Ajuda a proteger aplicações Express.JS definindo vários cabeçalhos HTTP.
 - [Winston](https://www.npmjs.com/package/winston#logging) - Um logger para quase tudo.
 - [Morgan](https://www.npmjs.com/package/morgan?activeTab=readme) - Middleware de logger para solicitações HTTP.
+- [Compression](https://www.npmjs.com/package/compression?activeTab=readme) - Um middleware de compressão.
 
 ## ✒️ Autor
 
