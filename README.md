@@ -46,6 +46,7 @@ DELETE: /books/3221 - Deleta um livro específico.
 - [Node.JS](https://nodejs.org/pt-br/) - Ambiente de Execução JavaScript.
 - [Yarn](https://yarnpkg.com/) - Gerenciador de Pacotes.
 - [Nodemon](https://nodemon.io/) - Utilitário de Desenvolvimento.
+- [Express.JS](https://expressjs.com/pt-br/) - Framework web rápido, flexível e minimalista para Node.JS.
 - [SQLite3](https://www.npmjs.com/package/sqlite3), [SQLite](https://www.sqlite.org/index.html) - Mini Banco de Dados SQL.
 - [Node-cache](https://www.npmjs.com/package/node-cache?activeTab=readme) - Cache interno NodeJS simples e rápido.
 - [Helmet](https://www.npmjs.com/package/helmet?activeTab=readme) - Ajuda a proteger aplicações Express.JS definindo vários cabeçalhos HTTP.
