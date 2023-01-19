@@ -1,11 +1,12 @@
 const express = require("express");
 const controllers = require("../controllers/index");
+const validateJSON = require("../middlewares/validateJSON");
 
 const booksRouter = express.Router();
 
 booksRouter.route("/")
     .get(controllers.getAllBooks)
-    .post(controllers.createBook);
+    .post(validateJSON, controllers.createBook);
 
 booksRouter.route("/:id")
     .get(controllers.getBook)
