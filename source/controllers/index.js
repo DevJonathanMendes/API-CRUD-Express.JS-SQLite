@@ -25,15 +25,11 @@ const controllers = {
         });
     },
 
-    getAllBooks: (req, res) => {
-        const select = "SELECT * FROM books";
-        sql.all(select, (err, rows) => {
-            if (err) {
-                res.status(500).send("Internal Server Error.");
-                return log.error(err.message);
-            };
-            res.status(200).json(rows);
-        });
+    getAllBooks: (req, res, next) => {
+        sql.all("SELECT * FROM books", (err, rows) =>
+            err ? next("Unable to return all books.")
+                : res.status(200).json(rows)
+        );
     },
 
     getBook: (req, res) => {
