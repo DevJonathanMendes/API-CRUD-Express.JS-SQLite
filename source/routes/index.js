@@ -7,12 +7,11 @@ const router = express.Router();
 router.use("/books", booksRouter);
 
 router.use((req, res, next) => {
-    res.status(404)
-        .json({
-            response: false,
-            status: "Not Found",
-            message: "Route does not exist."
-        });
+    res.status(404).json({
+        response: false,
+        status: "Not Found",
+        message: "Route does not exist."
+    });
 });
 
 router.use((err, req, res, next) => {
