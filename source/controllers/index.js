@@ -1,41 +1,35 @@
 const sql = require("../models/index");
 const log = require("../utils/logger");
 const cache = require("../utils/cache");
-const { validateJSON, getId } = require("../utils/utils");
+const validateJSON = require("../middlewares/validateJSON");
+
+const getId = id => /^\d*$/.test(id) ? id : null;
 
 const controllers = {
-    createBook: (req, res) => {
-        try {
-            validateJSON(req.body);
-            const { title, author, pages, published } = req.body;
-            const columns = "title, author, pages, published";
-            const values = `'${title.toLowerCase()}', '${author.toLowerCase()}', ${pages}, ${published}`;
-            const insert = `INSERT INTO books (${columns}) VALUES (${values});`;
+    createBook: (req, res, next) => {
+        const { title, author, pages, published } = req.body;
+        const columns = "title, author, pages, published";
+        const values = `'${title.toLowerCase()}', '${author.toLowerCase()}', ${pages}, ${published}`;
+        const insert = `INSERT INTO books (${columns}) VALUES (${values});`;
 
-            sql.run(insert, err => {
-                if (err) {
-                    if (err.code == "SQLITE_CONSTRAINT") {
-                        return res.status(400).send("Title already exists.");
-                    };
-                    res.status(500).send("Internal Server Error.");
-                    return log.error(err.message);
-                };
-                res.status(201).send("Created.");
+        sql.run(insert, err => {
+            if (err) return err.code === "SQLITE_CONSTRAINT"
+                ? next(new Error("Title already exists"))
+                : next(err.message);
+
+            return res.status(201).json({
+                response: true,
+                status: "Created",
+                message: req.body
             });
-        } catch (err) {
-            res.status(400).send(err.message);
-        };
+        });
     },
 
-    getAllBooks: (req, res) => {
-        const select = "SELECT * FROM books";
-        sql.all(select, (err, rows) => {
-            if (err) {
-                res.status(500).send("Internal Server Error.");
-                return log.error(err.message);
-            };
-            res.status(200).json(rows);
-        });
+    getAllBooks: (req, res, next) => {
+        sql.all("SELECT * FROM books", (err, rows) =>
+            err ? next("Unable to return all books.")
+                : res.status(200).json(rows)
+        );
     },
 
     getBook: (req, res) => {

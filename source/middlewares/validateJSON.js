@@ -2,9 +2,8 @@ const throwError = message => {
     throw new Error(message);
 };
 
-const getId = id => /^\d*$/.test(id) ? id : null;
-
-const validateJSON = book => {
+const validateJSON = (req, res, next) => {
+    const book = req.body;
     const keys = Object.keys(book);
 
     keys.forEach(key => {
@@ -31,6 +30,8 @@ const validateJSON = book => {
             default: throwError("Invalid JSON.");
         };
     });
+
+    next();
 };
 
-module.exports = { validateJSON, getId };
+module.exports = validateJSON;
