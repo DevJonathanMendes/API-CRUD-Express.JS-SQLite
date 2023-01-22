@@ -20,7 +20,7 @@ const controllers = {
             return res.status(201).json({
                 response: true,
                 status: "Created",
-                message: req.body
+                book: req.body
             });
         });
     },
@@ -28,7 +28,11 @@ const controllers = {
     getAllBooks: (req, res, next) => {
         sql.all("SELECT * FROM books", (err, rows) =>
             err ? next("Unable to return all books.")
-                : res.status(200).json(rows)
+                : res.status(200).json({
+                    response: true,
+                    status: "Ok",
+                    books: rows
+                })
         );
     },
 
