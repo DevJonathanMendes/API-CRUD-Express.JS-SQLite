@@ -1,4 +1,4 @@
-const sql = require("../models/index");
+const dataBase = require("../models/index");
 const log = require("../utils/logger");
 const cache = require("../utils/cache");
 const validateJSON = require("../middlewares/validateJSON");
@@ -7,33 +7,28 @@ const getId = id => /^\d*$/.test(id) ? id : null;
 
 const controllers = {
     createBook: (req, res, next) => {
-        const { title, author, pages, published } = req.body;
-        const columns = "title, author, pages, published";
-        const values = `'${title.toLowerCase()}', '${author.toLowerCase()}', ${pages}, ${published}`;
-        const insert = `INSERT INTO books (${columns}) VALUES (${values});`;
+        const book = req.body;
 
-        sql.run(insert, err => {
-            if (err) return err.code === "SQLITE_CONSTRAINT"
-                ? next(new Error("Title already exists"))
-                : next(err.message);
-
-            return res.status(201).json({
+        dataBase.run(book)
+            .then(() => res.status(201).json({
                 response: true,
                 status: "Created",
-                book: req.body
-            });
-        });
+                book
+            }))
+            .catch(err => err.code === "SQLITE_CONSTRAINT"
+                ? next(new Error("Title already exists"))
+                : next(err.message)
+            );
     },
 
     getAllBooks: (req, res, next) => {
-        sql.all("SELECT * FROM books", (err, rows) =>
-            err ? next("Unable to return all books.")
-                : res.status(200).json({
-                    response: true,
-                    status: "Ok",
-                    books: rows
-                })
-        );
+        dataBase.all()
+            .then(books => res.status(200).json({
+                response: true,
+                status: "Ok",
+                books: books
+            }))
+            .catch(err => next(err));
     },
 
     getBook: (req, res) => {
@@ -56,6 +51,7 @@ const controllers = {
                 res.status(204).send("No Content.");
         });
     },
+    /*
 
     patchBook: (req, res) => {
         try {
@@ -90,7 +86,7 @@ const controllers = {
             res.status(200).send("Ok.");
             cache.delete(id);
         });
-    }
+    } */
 };
 
 module.exports = controllers;
