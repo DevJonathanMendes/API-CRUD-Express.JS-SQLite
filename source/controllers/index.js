@@ -3,17 +3,16 @@ const log = require("../utils/logger");
 const cache = require("../utils/cache");
 const validateJSON = require("../middlewares/validateJSON");
 
-const getId = id => /^\d*$/.test(id) ? id : null;
 
 const controllers = {
     createBook: (req, res, next) => {
         const book = req.body;
 
         dataBase.run(book)
-            .then(() => res.status(201).json({
+            .then(lastID => res.status(201).json({
                 response: true,
                 status: "Created",
-                book
+                book: { id: lastID, ...book }
             }))
             .catch(err => err.code === "SQLITE_CONSTRAINT"
                 ? next(new Error("Title already exists"))
@@ -31,25 +30,26 @@ const controllers = {
             .catch(err => next(err));
     },
 
-    getBook: (req, res) => {
-        const id = getId(req.params.id);
+    getBook: (req, res, next) => {
+        const id = req.params.id;
         const bookCache = cache.get(id);
 
-        if (bookCache) {
-            return res.status(200).json(bookCache);
-        };
-
-        const select = `SELECT * FROM books WHERE id=${id}`;
-        sql.get(select, (err, rows) => {
-            if (err) {
-                res.status(500).send("Internal Server Error.");
-                log.error(err.message);
-            } else if (rows) {
-                res.status(200).json(rows);
-                cache.set(id, rows);
-            } else
-                res.status(204).send("No Content.");
+        if (bookCache) return res.status(200).json({
+            response: true,
+            status: "Ok",
+            book: bookCache
         });
+
+        dataBase.get(id)
+            .then(book => {
+                cache.set(id, book);
+                return res.status(200).json({
+                    response: true,
+                    status: "Ok",
+                    book: book || {}
+                });
+            })
+            .catch(err => next(err))
     },
     /*
 

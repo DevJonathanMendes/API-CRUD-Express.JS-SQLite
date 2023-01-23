@@ -35,14 +35,22 @@ class DataBase {
         const insert = `INSERT INTO books (${columns}) VALUES (${values});`;
 
         return new Promise((resolve, reject) =>
-            this.db.run(insert, err => err ? reject(err) : resolve())
-        )
+            this.db.run(insert, function (err) {
+                return err ? reject(err) : resolve(this.lastID);
+            }));
     };
 
     all() {
         return new Promise((resolve, reject) =>
             this.db.all("SELECT * FROM books", (err, rows) =>
                 err ? reject("Unable to return all books.") : resolve(rows))
+        )
+    };
+
+    get(id) {
+        return new Promise((resolve, reject) =>
+            this.db.get(`SELECT * FROM books WHERE id=${id}`, (err, rows) =>
+                err ? reject("Unable to return the book.") : resolve(rows))
         )
     };
 };
