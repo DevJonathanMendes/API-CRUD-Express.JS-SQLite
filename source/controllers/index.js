@@ -65,20 +65,21 @@ const controllers = {
             });
         }).catch(err => next(err));
     },
-    /*
-    deleteBook: (req, res) => {
-        const id = getId(req.params.id);
-        const del = `DELETE FROM books WHERE id=${id}`;
 
-        sql.run(del, err => {
-            if (err) {
-                res.status(400).send("Bad Request.");
-                return log.error(err.message);
-            };
-            res.status(200).send("Ok.");
-            cache.delete(id);
-        });
-    } */
+    deleteBook: (req, res, next) => {
+        const id = req.params.id;
+
+        dataBase.delete(id)
+            .then(msg => {
+                cache.del(id);
+                return res.status(200).json({
+                    response: true,
+                    status: "Ok",
+                    message: msg
+                });
+            })
+            .catch(err => next(err));
+    }
 };
 
 module.exports = controllers;
