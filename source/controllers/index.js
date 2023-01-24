@@ -1,8 +1,5 @@
 const dataBase = require("../models/index");
-const log = require("../utils/logger");
 const cache = require("../utils/cache");
-const validateJSON = require("../middlewares/validateJSON");
-
 
 const controllers = {
     createBook: (req, res, next) => {
