@@ -49,9 +49,24 @@ class DataBase {
 
     get(id) {
         return new Promise((resolve, reject) =>
-            this.db.get(`SELECT * FROM books WHERE id=${id}`, (err, rows) =>
-                err ? reject("Unable to return the book.") : resolve(rows))
-        )
+            this.db.get(`SELECT * FROM books WHERE id=${id}`, (err, book) =>
+                err ? reject("Could not find the book.") : resolve(book))
+        );
+    };
+
+    patch(id, { book, transformedBook }) {
+        return new Promise((resolve, reject) => {
+            this.get(id)
+                .then(foundBook => {
+                    if (!foundBook) return resolve("The book does not exist.");
+
+                    return this.db.run(`UPDATE books SET ${transformedBook} WHERE id=${id}`,
+                        err => err
+                            ? reject("Unable to update book.")
+                            : resolve({ id, ...book }));
+                })
+                .catch(err => reject(err));
+        });
     };
 };
 

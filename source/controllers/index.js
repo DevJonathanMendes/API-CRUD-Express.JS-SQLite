@@ -51,29 +51,21 @@ const controllers = {
             })
             .catch(err => next(err))
     },
-    /*
 
-    patchBook: (req, res) => {
-        try {
-            validateJSON(req.body);
-            const id = getId(req.params.id);
-            const set = Object.entries(req.body).map(([key, value]) =>
-                `${key}='${typeof value == "string" ? value.toLowerCase() : value}'`);
-            const update = `UPDATE books SET ${set} WHERE id=${id}`;
+    patchBook: (req, res, next) => {
+        const id = req.params.id;
+        const books = req.body;
 
-            sql.run(update, err => {
-                if (err) {
-                    res.status(500).send("Internal Server Error.");
-                    return log.error(err.message);
-                };
-                res.status(200).send("Ok.");
-                cache.delete(id);
+        dataBase.patch(id, books).then(resolve => {
+            cache.del(id);
+            return res.status(200).json({
+                response: true,
+                status: "Ok",
+                book: resolve
             });
-        } catch (err) {
-            res.status(400).send(err.message);
-        };
+        }).catch(err => next(err));
     },
-
+    /*
     deleteBook: (req, res) => {
         const id = getId(req.params.id);
         const del = `DELETE FROM books WHERE id=${id}`;
