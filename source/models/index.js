@@ -68,6 +68,16 @@ class DataBase {
                 .catch(err => reject(err));
         });
     };
+
+    delete(id) {
+        return new Promise((resolve, reject) => {
+            this.db.run(`DELETE FROM books WHERE id=${id}`, err => {
+                return err
+                    ? reject("Unable to delete the book.")
+                    : resolve("The book has been deleted.");
+            });
+        });
+    };
 };
 
 const dataBase = new DataBase();
