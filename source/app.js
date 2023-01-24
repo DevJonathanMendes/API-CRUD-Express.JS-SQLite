@@ -1,4 +1,3 @@
-//require("./models/index");
 const express = require("express");
 const morganMiddleware = require("./middlewares/morgan");
 const helmet = require("helmet");
