@@ -1,43 +1,59 @@
 # APIBook
 
-Prática com Express.JS e SQLite3
+Uma API CRUD sobre Livros. 
 
 ## 🚀 Começando
 
 ### 📋 Pré-requisitos
 
-```
-Node.JS
-SQLite
-Porta 3000 do localhost livre (ou especificar)
-```
+- [Node.JS](https://nodejs.org/pt-br/) - Ambiente de Execução JavaScript.
+- [SQLite3](https://www.npmjs.com/package/sqlite3) - Mini Banco de Dados SQL.
 
 ### 🔧 Instalação
 
-Para iniciar:
+No terminal do VS Code:
 
+| Comando     | Descrição                               |
+|:------------|:----------------------------------------|
+| `yarn`      | Baixas as dependências (**Obrigatório**)|
+| `yarn start`| Iniciar em modo de produção             |
+| `yarn dev`  | Iniciar em modo de desenvolvimento      |
+| `yarn test` | Iniciar os testes                       |
+
+## 💻 Documentação da API
+
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `number` | **Obrigatório**. O ID do item |
+
+### Retorna todos os itens no formato JSON
+
+```http
+  GET /books/
 ```
-No console do VS Code, digite:
 
-yarn - Para baixar as dependências.
+### Retorna um item no formato JSON
 
-Há dois scripts para iniciar o servidor:
-yarn dev - Para desenvolvimento.
-yarn start - Para produção.
+```http
+  GET /books/${id}
 ```
 
-Para Interagir com a API:
+### Cria um item a partir de um JSON
 
+```http
+  POST /books/
 ```
-No navegador, estão disponíveis 5 rotas:
 
-http://localhost:[PORTA]/path/ - Exemplo.
+### Modifica um item a partir de um JSON
 
-GET: /books/ - Retorna um JSON com todos os livros salvos.
-GET: /books/1012 - Retorna um JSON com um livro específico.
-POST: /books/ - Cria um livro a partir de um JSON.
-PATCH: /books/3117 - Modifica um livro específico a partir de um JSON.
-DELETE: /books/3221 - Deleta um livro específico.
+```http
+  PATCH /books/${id}
+```
+
+### Deleta um item
+
+```http
+  DELETE /books/${id}
 ```
 
 ## 🛠️ Construído com
