@@ -36,7 +36,12 @@ class DataBase {
 
         return new Promise((resolve, reject) =>
             this.db.run(insert, function (err) {
-                return err ? reject(err) : resolve(this.lastID);
+                if (err)
+                    return err.code === "SQLITE_CONSTRAINT"
+                        ? reject(new Error("Title already exists"))
+                        : reject("Unable to update book.");
+
+                return resolve(this.lastID);
             }));
     };
 
@@ -60,10 +65,14 @@ class DataBase {
                 .then(foundBook => {
                     if (!foundBook) return resolve("The book does not exist.");
 
-                    return this.db.run(`UPDATE books SET ${transformedBook} WHERE id=${id}`,
-                        err => err
-                            ? reject("Unable to update book.")
-                            : resolve({ id, ...book }));
+                    return this.db.run(`UPDATE books SET ${transformedBook} WHERE id=${id}`, err => {
+                        if (err)
+                            return err.code === "SQLITE_CONSTRAINT"
+                                ? reject(new Error("Title already exists"))
+                                : reject("Unable to update book.");
+
+                        return resolve({ id, ...book });
+                    });
                 })
                 .catch(err => reject(err));
         });
