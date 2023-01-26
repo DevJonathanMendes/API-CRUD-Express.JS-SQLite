@@ -105,3 +105,6 @@ dist
 
 # Data Base
 *.db
+
+#vscode configs
+.vscode
