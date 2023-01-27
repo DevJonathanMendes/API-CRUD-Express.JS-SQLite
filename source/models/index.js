@@ -48,8 +48,8 @@ class DataBase {
     all() {
         return new Promise((resolve, reject) =>
             this.db.all("SELECT * FROM books", (err, rows) =>
-                err ? reject("Unable to return all books.") : resolve(rows))
-        )
+                err ? reject("Unable to return all books.")
+                    : resolve(rows)));
     };
 
     get(id) {
