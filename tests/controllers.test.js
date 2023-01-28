@@ -47,3 +47,17 @@ describe("Testing 'createBook'", () => {
         expect(res.status).toBe(400);
     });
 });
+
+describe("Testing 'getBook'", () => {
+    it("Should return a book", async () => {
+        const res = await request(app).get("/books/1");
+
+        expect(res.status).toBe(200);
+    });
+
+    it("Should not return a book", async () => {
+        const res = await request(app).get("/books/one");
+
+        expect(res.status).toBe(400);
+    });
+});
