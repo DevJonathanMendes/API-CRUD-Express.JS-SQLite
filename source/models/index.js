@@ -61,20 +61,17 @@ class DataBase {
 
     patch(id, { book, transformedBook }) {
         return new Promise((resolve, reject) => {
-            this.get(id)
-                .then(foundBook => {
-                    if (!foundBook) return resolve("The book does not exist.");
+            this.get(id).then(foundBook => {
+                if (!foundBook) return resolve("The book does not exist.");
 
-                    return this.db.run(`UPDATE books SET ${transformedBook} WHERE id=${id}`, err => {
-                        if (err)
-                            return err.code === "SQLITE_CONSTRAINT"
-                                ? reject(new Error("Title already exists"))
-                                : reject("Unable to update book.");
+                return this.db.run(`UPDATE books SET ${transformedBook} WHERE id=${id}`, err => {
+                    if (err) return err.code === "SQLITE_CONSTRAINT"
+                        ? reject(new Error("Title already exists"))
+                        : reject("Unable to update book.");
 
-                        return resolve({ id, ...book });
-                    });
-                })
-                .catch(err => reject(err));
+                    return resolve({ id, ...book });
+                });
+            }).catch(err => reject(err));
         });
     };
 
