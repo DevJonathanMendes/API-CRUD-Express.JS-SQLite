@@ -2,11 +2,15 @@ const request = require("supertest");
 const app = require("../source/app");
 
 const randomNum = () => Math.round(Math.random() * 1000);
-const book = {
-    title: `Book ${randomNum()}`,
-    author: `Author ${randomNum()}`,
-    pages: randomNum(),
-    published: 1995
+const book = () => {
+    const AnyNumber = randomNum();
+
+    return {
+        title: `Book ${AnyNumber}`,
+        author: `Author ${AnyNumber}`,
+        pages: AnyNumber,
+        published: 1995
+    };
 };
 
 /* const { any, arrayContaining } = expect;
@@ -29,7 +33,7 @@ describe("Testing 'createBook'", () => {
     it("Should add a book", async () => {
         const res = await request(app)
             .post("/books")
-            .send(book);
+            .send(book());
 
         expect(res.status).toBe(201);
     });
@@ -57,6 +61,32 @@ describe("Testing 'getBook'", () => {
 
     it("Should not return a book", async () => {
         const res = await request(app).get("/books/one");
+
+        expect(res.status).toBe(400);
+    });
+});
+
+describe("Testing 'patchBook'", () => {
+    it("Should update a book", async () => {
+        const res = await request(app)
+            .patch("/books/1").send({
+                "title": "book update",
+                "author": "author update",
+                "published": 1995,
+                "pages": 300
+            });
+
+        expect(res.status).toBe(200);
+    });
+
+    it("Should not update a book", async () => {
+        const res = await request(app)
+            .patch("/books/2").send({
+                "title": "book update",
+                "author": "author update",
+                "published": 1995,
+                "pages": 300
+            });
 
         expect(res.status).toBe(400);
     });
