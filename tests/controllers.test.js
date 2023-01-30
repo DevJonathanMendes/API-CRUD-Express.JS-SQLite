@@ -91,3 +91,11 @@ describe("Testing 'patchBook'", () => {
         expect(res.status).toBe(400);
     });
 });
+
+describe("Testing 'deleteBook'", () => {
+    it("Should delete a book", async () => {
+        const res = await request(app).delete("/books/2");
+
+        expect(res.status).toBe(200);
+    });
+});
