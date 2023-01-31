@@ -94,8 +94,14 @@ describe("Testing 'patchBook'", () => {
 
 describe("Testing 'deleteBook'", () => {
     it("Should delete a book", async () => {
-        const res = await request(app).delete("/books/2");
+        const res = await request(app).delete("/books/100");
 
         expect(res.status).toBe(200);
+    });
+
+    it("Should not delete a book", async () => {
+        const res = await request(app).delete("/books/one");
+
+        expect(res.status).toBe(400);
     });
 });
