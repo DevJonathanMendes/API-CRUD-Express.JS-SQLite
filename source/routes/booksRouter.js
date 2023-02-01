@@ -1,6 +1,6 @@
 const express = require("express");
 const controllers = require("../controllers/index");
-const transformBook = require("../middlewares/transformaUpdateBook");
+const transformBook = require("../middlewares/transformUpdateBook");
 const validateId = require("../middlewares/validateId");
 const validateJSON = require("../middlewares/validateJSON");
 
