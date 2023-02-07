@@ -1,6 +1,6 @@
 const dataBase = require("../models/index");
 const cache = require("../utils/cache");
-const resJSON = require("../utils/resJSO");
+const resJSON = require("../utils/resJSON");
 
 const controllers = {
     createBook: (req, res, next) => {

@@ -1,7 +1,7 @@
 const express = require("express");
 const booksRouter = require("./booksRouter");
 const logger = require("../utils/logger");
-const resJSON = require("../utils/resJSO");
+const resJSON = require("../utils/resJSON");
 
 const router = express.Router();
 
