@@ -13,16 +13,6 @@ const book = () => {
     };
 };
 
-/* const { any, arrayContaining } = expect;
-const book = expect.objectContaining({
-    id: any(Number),
-    title: any(String),
-    author: any(String),
-    pages: any(Number),
-    published: any(Number)
-});
-length > 0 ? arrayContaining([book]) : arrayContaining([]) */
-
 test("Should return all books", async () => {
     const res = await request(app).get("/books");
 
