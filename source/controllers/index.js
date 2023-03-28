@@ -1,19 +1,26 @@
-const dataBase = require("../models/index");
+const ModelDatabase = require("../models/ModelDatabase");
 const cache = require("../utils/cache");
 const resJSON = require("../utils/resJSON");
+
+const BooksDatabase = new ModelDatabase("books", {
+    title: "TEXT NOT NULL UNIQUE",
+    author: "TEXT NOT NULL",
+    pages: "INTEGER NOT NULL",
+    published: "INTEGER NOT NULL"
+});
 
 const controllers = {
     createBook: (req, res, next) => {
         const book = req.body;
 
-        dataBase.run(book)
+        BooksDatabase.create(book)
             .then(lastID => res.status(201)
-                .json(resJSON("Created", { id: lastID, ...book })))
-            .catch(err => next(err));
+                .json(resJSON("Created", { book: { id: lastID, ...book } }))
+            ).catch(err => next(err));
     },
 
     getAllBooks: (req, res, next) => {
-        dataBase.all()
+        BooksDatabase.read()
             .then(books => res.status(200).json(resJSON("Ok", { books })))
             .catch(err => next(err));
     },
@@ -24,7 +31,7 @@ const controllers = {
 
         if (book) return res.status(200).json(resJSON("Ok", { book }));
 
-        dataBase.get(id)
+        BooksDatabase.get(id)
             .then(book => {
                 cache.set(id, book);
                 return res.status(200).json(resJSON("Ok", { book: book || "Does not exist." }));
@@ -36,7 +43,7 @@ const controllers = {
         const id = req.params.id;
         const books = req.body;
 
-        dataBase.patch(id, books).then(book => {
+        BooksDatabase.patch(id, books).then(book => {
             cache.del(id);
             return res.status(200).json(resJSON("Ok", { book }));
         })
@@ -46,7 +53,7 @@ const controllers = {
     deleteBook: (req, res, next) => {
         const id = req.params.id;
 
-        dataBase.delete(id)
+        BooksDatabase.delete(id)
             .then(message => {
                 cache.del(id);
                 return res.status(200).json(resJSON("Ok", { message }));
