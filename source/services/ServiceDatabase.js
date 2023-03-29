@@ -29,8 +29,8 @@ class ServiceDatabase {
         this.db.run(CREATE);
     };
 
-    create(columns, values) {
-        const INSERT = `INSERT INTO ${this.tableName} (${columns}) VALUES (${values})`;
+    create(obj) {
+        const INSERT = `INSERT INTO ${this.tableName} (${obj.columns}) VALUES (${obj.values})`;
 
         return new Promise((resolve, reject) => {
             function response(err) {
@@ -47,7 +47,7 @@ class ServiceDatabase {
 
         return new Promise((resolve, reject) => {
             const response = (err, rows) =>
-                err ? reject(err) : resolve(rows);
+                err ? reject("Could not find") : resolve(rows);
 
             id ? this.db.get(`${SELECTALL} ${WHEREID}`, response)
                 : this.db.all(SELECTALL, response);
@@ -58,8 +58,8 @@ class ServiceDatabase {
         const UPDATE = `UPDATE ${this.tableName} SET ${values} WHERE id=${id}`;
 
         return new Promise((resolve, reject) => {
-            const response = (err, rows) =>
-                err ? reject(err) : resolve(rows);
+            const response = err =>
+                err ? reject("Could not update") : resolve("Updated");
 
             return this.db.run(UPDATE, response);
         });
@@ -70,7 +70,7 @@ class ServiceDatabase {
 
         return new Promise((resolve, reject) =>
             this.db.run(DELETE, err =>
-                err ? reject("Unable to delete") : resolve("Deleted")
+                err ? reject("Could not delete") : resolve("Deleted")
             )
         );
     };
