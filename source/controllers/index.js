@@ -43,10 +43,11 @@ const controllers = {
         const id = req.params.id;
         const books = req.body;
 
-        BooksDatabase.patch(id, books).then(book => {
-            cache.del(id);
-            return res.status(200).json(resJSON("Ok", { book }));
-        })
+        BooksDatabase.update(id, books)
+            .then(book => {
+                cache.del(id);
+                return res.status(200).json(resJSON("Ok", { book }));
+            })
             .catch(err => next(err));
     },
 
