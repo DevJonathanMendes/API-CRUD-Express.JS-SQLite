@@ -11,7 +11,7 @@ booksRouter.route("/")
     .post(validateJSON, controllers.createBook);
 booksRouter.route("/:id")
     .get(validateId, controllers.getBook)
-    .patch([validateId, validateJSON, transformBook], controllers.patchBook)
+    .patch([validateId, validateJSON], controllers.patchBook)
     .delete(validateId, controllers.deleteBook);
 
 module.exports = booksRouter;
