@@ -66,14 +66,13 @@ class ServiceDatabase {
     };
 
     delete(id) {
-        const DELETE = `DELETE FROM ${this.tableName} WHEREs id=${id}`;
+        const DELETE = `DELETE FROM ${this.tableName} WHERE id=${id}`;
 
-        return new Promise((resolve, reject) => {
-            const response = err =>
-                err ? reject(err) : resolve();
-
-            this.db.run(DELETE, response);
-        });
+        return new Promise((resolve, reject) =>
+            this.db.run(DELETE, err =>
+                err ? reject("Unable to delete") : resolve("Deleted")
+            )
+        );
     };
 };
 

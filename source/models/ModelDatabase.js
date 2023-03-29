@@ -36,10 +36,14 @@ class ModelDatabase {
         return this.db.create(columns, values);
     };
 
-    read(id) { return this.db.read(id); };
+    read(id) {
+        return this.db.read(id);
+    };
+
+    update() { };
 
     delete(id) {
-        return this.db.delete(id)
+        return this.db.delete(id);
     };
 };
 
