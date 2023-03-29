@@ -1,6 +1,6 @@
 const ServiceDatabase = require("../services/ServiceDatabase");
 
-const formatObj = obj => {
+const formatCreateSQL = obj => {
     const format = (acc, value, index, array) =>
         array.length - 1 == index
             ? acc += `'${value}'`
@@ -15,7 +15,7 @@ const formatObj = obj => {
     return { columns, values };
 };
 
-const formatColumns = rows => {
+const formatTableSQL = rows => {
     const concat = (str1, str2) => str1 + str2.join(" ");
     const format = (acc, values, index, array) =>
         array.length - 1 == index
@@ -25,22 +25,44 @@ const formatColumns = rows => {
     return Object.entries(rows).reduce(format, "");
 };
 
+const formatUpdateSQL = obj => {
+    const normalize = value =>
+        typeof value == "string" ? value.toLowerCase() : value;
+
+    const entries = Object.entries(obj);
+
+    const transformedEntries = entries
+        .map(([key, value]) => `${key}='${normalize(value)}'`);
+
+    const transformedObj = transformedEntries.toString();
+
+    return transformedObj;
+};
+
 class ModelDatabase {
     constructor(tableName, rows) {
         this.tableName = tableName;
-        this.db = new ServiceDatabase(tableName, formatColumns(rows));
+        this.db = new ServiceDatabase(tableName, formatTableSQL(rows));
     };
 
     create(obj) {
-        const { columns, values } = formatObj(obj);
-        return this.db.create(columns, values);
+        return this.db.create(formatCreateSQL(obj));
     };
 
     read(id) {
         return this.db.read(id);
     };
 
-    update() { };
+    update(id, obj) {
+        return this.db.read(id)
+            .then(found =>
+                found ? this.db.update(id, formatUpdateSQL(obj))
+                    .then(() => obj)
+                    .catch(err => { throw err })
+                    : "Not Found"
+            )
+            .catch(err => { throw err });
+    };
 
     delete(id) {
         return this.db.delete(id);
