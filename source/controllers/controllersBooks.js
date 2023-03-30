@@ -31,7 +31,7 @@ const controllers = {
 
         if (book) return res.status(200).json(resJSON("Ok", { book }));
 
-        BooksDatabase.get(id)
+        BooksDatabase.read(id)
             .then(book => {
                 cache.set(id, book);
                 return res.status(200).json(resJSON("Ok", { book: book || "Does not exist." }));
@@ -41,12 +41,12 @@ const controllers = {
 
     patchBook: (req, res, next) => {
         const id = req.params.id;
-        const books = req.body;
+        const book = req.body;
 
-        BooksDatabase.update(id, books)
-            .then(book => {
+        BooksDatabase.update(id, book)
+            .then((message) => {
                 cache.del(id);
-                return res.status(200).json(resJSON("Ok", { book }));
+                return res.status(200).json(resJSON("Ok", { message }));
             })
             .catch(err => next(err));
     },
