@@ -55,11 +55,9 @@ class ModelDatabase {
 
     update(id, obj) {
         return this.db.read(id)
-            .then(found =>
-                found ? this.db.update(id, formatUpdateSQL(obj))
-                    .then(() => obj)
-                    .catch(err => { throw err })
-                    : "Not Found"
+            .then(found => found
+                ? this.db.update(id, formatUpdateSQL(obj))
+                : "Not Found"
             )
             .catch(err => { throw err });
     };

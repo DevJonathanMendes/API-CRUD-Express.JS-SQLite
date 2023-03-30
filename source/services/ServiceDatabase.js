@@ -58,10 +58,15 @@ class ServiceDatabase {
         const UPDATE = `UPDATE ${this.tableName} SET ${values} WHERE id=${id}`;
 
         return new Promise((resolve, reject) => {
-            const response = err =>
-                err ? reject("Could not update") : resolve("Updated");
+            const response = err => {
+                if (err) err.code === "SQLITE_CONSTRAINT"
+                    ? reject(new Error("Already exists"))
+                    : reject("Could not update");
 
-            return this.db.run(UPDATE, response);
+                resolve("Updated");
+            };
+
+            this.db.run(UPDATE, response);
         });
     };
 
