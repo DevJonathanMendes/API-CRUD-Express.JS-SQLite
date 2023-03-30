@@ -1,5 +1,5 @@
 const express = require("express");
-const controllers = require("../controllers/index");
+const controllersBooks = require("../controllers/controllersBooks");
 const transformBook = require("../middlewares/transformUpdateBook");
 const validateId = require("../middlewares/validateId");
 const validateJSON = require("../middlewares/validateJSON");
@@ -7,11 +7,11 @@ const validateJSON = require("../middlewares/validateJSON");
 const booksRouter = express.Router();
 
 booksRouter.route("/")
-    .get(controllers.getAllBooks)
-    .post(validateJSON, controllers.createBook);
+    .get(controllersBooks.getAllBooks)
+    .post(validateJSON, controllersBooks.createBook);
 booksRouter.route("/:id")
-    .get(validateId, controllers.getBook)
-    .patch([validateId, validateJSON], controllers.patchBook)
-    .delete(validateId, controllers.deleteBook);
+    .get(validateId, controllersBooks.getBook)
+    .patch([validateId, validateJSON], controllersBooks.patchBook)
+    .delete(validateId, controllersBooks.deleteBook);
 
 module.exports = booksRouter;
