@@ -15,7 +15,7 @@ No terminal do VS Code:
 
 | Comando     | Descrição                               |
 |:------------|:----------------------------------------|
-| `yarn`      | Baixas as dependências (**Obrigatório**)|
+| `yarn`      | Baixa as dependências (**Obrigatório**)|
 | `yarn start`| Iniciar em modo de produção             |
 | `yarn dev`  | Iniciar em modo de desenvolvimento      |
 | `yarn test` | Iniciar os testes                       |
