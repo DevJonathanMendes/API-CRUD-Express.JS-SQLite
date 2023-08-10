@@ -62,6 +62,7 @@ No terminal do VS Code:
 - [Node.JS](https://nodejs.org/pt-br/) - Ambiente de Execução JavaScript.
 - [Yarn](https://yarnpkg.com/) - Gerenciador de Pacotes.
 - [Nodemon](https://nodemon.io/) - Utilitário de Desenvolvimento.
+- [Jest](https://jestjs.io/pt-BR/) - Um poderoso framework de testes com foco na simplicidade.
 - [Express.JS](https://expressjs.com/pt-br/) - Framework web rápido, flexível e minimalista para Node.JS.
 - [SQLite3](https://www.npmjs.com/package/sqlite3), [SQLite](https://www.sqlite.org/index.html) - Mini Banco de Dados SQL.
 - [Node-cache](https://www.npmjs.com/package/node-cache?activeTab=readme) - Cache interno NodeJS simples e rápido.
